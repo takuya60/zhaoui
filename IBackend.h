@@ -1,7 +1,7 @@
 # ifndef IBACKEND_H
 # define IBACKEND_H
 # include "ProtocolData.h"
-# include <Qobject>
+# include <QObject>
 
 // 刺激参数结构体
 struct StimulationParam
@@ -17,14 +17,14 @@ struct StimulationParam
           posAmp(0.0f), negAmp(0.0f) {}
 };
 // PID 参数结构体
-struct PIDSettings {
+struct PIDParam {
     float kp;
     float ki;
     float kd;
     float limit; // 积分限幅
     
     // 构造函数
-    PIDSettings() : kp(1.0f), ki(0.0f), kd(0.0f), limit(100.0f) {}
+    PIDParam() : kp(1.0f), ki(0.0f), kd(0.0f), limit(100.0f) {}
 };
 
 class IBackend : public QObject
@@ -41,7 +41,7 @@ virtual void stopStimulation() = 0;
 virtual void updateParameters(const StimulationParam &param)=0;
 
 // 设置 PID 参数
-virtual void setPIDParameters(const PIDSettings &pid) = 0;
+virtual void setPIDParameters(const PIDParam &pid) = 0;
 
 signals:
     // 波形数据包接收

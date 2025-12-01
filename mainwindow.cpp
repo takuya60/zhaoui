@@ -403,7 +403,7 @@ void PidPage::resetParams() {
     m_slKd->setValue(5);
 }
 
-void PidPage::updateTargetTip(double val) {
+void PidPage::updateTargetTip(float val) {
     m_lblInfo->setText(QString("ℹ️ 提示：PID 目标值已自动关联至正向幅值 (%1V)。").arg(val, 0, 'f', 1));
 }
 
