@@ -143,7 +143,7 @@ void RPMsgBackend :: handleSocketActivated(int socket)
                 WaveformPacket* packet=(WaveformPacket*)buffer;
                 
                 // 校验和验证
-                uint8_t checksum = calculateChecksum(&packet, sizeof(WaveformPacket) - 1);
+                uint8_t checksum = calculateChecksum(packet, sizeof(WaveformPacket) - 1);
                 if (checksum == packet->checksum)
                 {
                     emit waveDataReceived(*packet);
@@ -163,13 +163,12 @@ void RPMsgBackend :: handleSocketActivated(int socket)
         {
             if (bytesRead == sizeof(StatusPacket))
             {
-                StatusPacket packet;
-                memcpy(&packet,buffer,sizeof(StatusPacket));
+                StatusPacket * packet=(StatusPacket*)buffer;
                 // 校验和验证
                 uint8_t checksum = calculateChecksum(&packet, sizeof(StatusPacket) - 1);
-                if (checksum == packet.checksum)
+                if (checksum == packet->checksum)
                 {
-                    emit statusDataReceived(packet);
+                    emit statusDataReceived(*packet);
                 }
                 else
                 {

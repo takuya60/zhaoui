@@ -5,7 +5,7 @@
 #include <QTimer>
 #include "IBackend.h"
 
-enum class DeviceState {
+enum class Runstate {
     Idle,
     Running,
     Paused
@@ -27,14 +27,20 @@ private:
     IBackend *m_backend;
     StimulationParam m_currentParam;
     QTimer *m_timer;
-    DeviceState m_state;
+    Runstate m_state;
     int m_remainingSeconds; 
 private slots:
     void onTimerTick();
+    void handleStatusPacket(const StatusPacket &packet);
+    void handleWaveformPacket(const WaveformPacket &packet);
 
 signals:
 
     void timeUpdated(int secondsLeft);
+    void runStateChanged(Runstate newState);
+    void stateChanged(float impedance, uint8_t batteryPct, uint8_t errorCode);
+    void waveformReceived(const QVector<float> &data);
+
 
 };
 

@@ -8,7 +8,7 @@ class RPMsgBackend : public IBackend
 
 public:
     explicit RPMsgBackend(QObject *parent = nullptr);
-            ~RPMsgBackend() override; // 析构函数，用于关闭 fd
+            ~RPMsgBackend() override;
 // 开始/停止刺激，更新参数
     void startStimulation(const StimulationParam &param)override;
     void stopStimulation()override;
@@ -29,8 +29,6 @@ private:
 
 private slots:
     void handleSocketActivated(int socket);
-
-
 
 };
 
