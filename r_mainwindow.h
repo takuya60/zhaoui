@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef R_MAINWINDOW_H
+#define R_MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QWidget>
@@ -10,14 +10,17 @@
 #include <QStackedWidget>
 #include <QButtonGroup>
 #include "WaveformWidget.h"
+#include "TreatManager.h"
+
 
 // ==========================================
 // 页面 1: 刺激控制页
 // ==========================================
+
 class StimulationPage : public QWidget {
     Q_OBJECT
 public:
-    explicit StimulationPage(QWidget *parent = nullptr);
+    explicit StimulationPage(QWidget *parent = nullptr, TreatmentManager *manager) ;
 
 signals:
     void posAmpChanged(float val);
@@ -26,10 +29,15 @@ private slots:
     void onSliderMoved();
     void onBtnApplyClicked();
     void toggleStimulation();
+    void timehandle(int secondsLeft);
     void onLogicTimer();
+    void onStateChanged(Runstate state);
 
 private:
     void setupUi();
+    StimulationParam sti_param;
+    
+    TreatmentManager *m_manager;
     
     WaveformWidget *m_waveWidget;
     QLabel *m_lblStatus;
@@ -80,7 +88,7 @@ private:
 class PidPage : public QWidget {
     Q_OBJECT
 public:
-    explicit PidPage(QWidget *parent = nullptr);
+    explicit PidPage(QWidget *parent = nullptr, TreatmentManager *manager);
 
 public slots:
     // 【修改】参数类型改为 float
@@ -89,10 +97,12 @@ public slots:
 private slots:
     void onSliderChanged();
     void resetParams();
+    void onBtnApplyClicked();
 
 private:
     void setupUi();
-    
+    TreatmentManager *m_manager;
+    PIDParam pid_param;
     QSlider *m_slKp;
     QSlider *m_slKi;
     QSlider *m_slKd;
@@ -101,9 +111,11 @@ private:
     QLabel *m_valKi;
     QLabel *m_valKd;
     QLabel *m_lblInfo;
+    QPushButton *m_btnApply;
+    QPushButton *m_btnReset;
 };
 
-// ... (BlankPage 和 MainWindow 保持不变) ...
+// BlankPage
 class BlankPage : public QWidget {
     Q_OBJECT
 public:
@@ -112,7 +124,7 @@ public:
 
 
 
-
+// main window
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
@@ -122,6 +134,7 @@ private slots:
 private:
     void setupUi();
     void setupStyle();
+    TreatmentManager *m_manager;
     QStackedWidget *m_stackedWidget;
     QButtonGroup *m_navGroup;
     StimulationPage *m_pageStim;

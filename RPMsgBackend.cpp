@@ -10,7 +10,7 @@ RPMsgBackend::RPMsgBackend(QObject *parent): IBackend(parent)
 {
 
     m_fd =  open("/dev/ttyRPMSG0", O_RDWR | O_NONBLOCK);
-    if (m_fd>0)
+    if (m_fd>=0)
     {
         m_notifier = new QSocketNotifier(m_fd,QSocketNotifier::Read,this);
 
@@ -32,7 +32,7 @@ RPMsgBackend:: ~RPMsgBackend()
         delete m_notifier;
     }
     
-    if (m_fd > 0)
+    if (m_fd >= 0)
     {
         close(m_fd);
         m_fd = -1;
@@ -165,7 +165,7 @@ void RPMsgBackend :: handleSocketActivated(int socket)
             {
                 StatusPacket * packet=(StatusPacket*)buffer;
                 // 校验和验证
-                uint8_t checksum = calculateChecksum(&packet, sizeof(StatusPacket) - 1);
+                uint8_t checksum = calculateChecksum(packet, sizeof(StatusPacket) - 1);
                 if (checksum == packet->checksum)
                 {
                     emit statusDataReceived(*packet);

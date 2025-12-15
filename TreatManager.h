@@ -22,6 +22,7 @@ public:
     void stopTreatment();
     void updateParameters(const StimulationParam &param);
     void setPIDParameters(const PIDParam &pid);
+    Runstate currentState() const { return m_state; }
 
 private:
     IBackend *m_backend;
@@ -35,9 +36,9 @@ private slots:
     void handleWaveformPacket(const WaveformPacket &packet);
 
 signals:
-
+    void runstateChanged(Runstate State);
     void timeUpdated(int secondsLeft);
-    void runStateChanged(Runstate newState);
+
     void stateChanged(float impedance, uint8_t batteryPct, uint8_t errorCode);
     void waveformReceived(const QVector<float> &data);
 

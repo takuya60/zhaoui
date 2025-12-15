@@ -6,6 +6,7 @@ TreatmentManager::TreatmentManager(IBackend *backend,QObject *parent)
 : QObject(parent), m_backend(backend)
 {
     m_state = Runstate::Idle;
+    emit runstateChanged(Runstate::Idle);
     m_remainingSeconds = 0;
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
@@ -33,6 +34,7 @@ void TreatmentManager:: startTreatment(int duration)
     QTimer *timer = new QTimer(this);
     m_timer->start(duration * 1000);
     m_state=Runstate::Running;
+    emit runstateChanged(Runstate::Running);
 }
 
 // 停止治疗
@@ -49,6 +51,7 @@ void TreatmentManager::stopTreatment()
     }
     m_backend->stopStimulation();
     m_state=Runstate::Idle;
+    emit runstateChanged(Runstate::Idle);
 }
 
 // 更新刺激参数
